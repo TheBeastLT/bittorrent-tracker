@@ -285,6 +285,18 @@ Client.scrape = (opts, cb) => {
     }
   })
 
+  client.once('done', success => {
+    if (len !== 0) {
+      client.destroy()
+      const keys = Object.keys(results)
+      if (keys.length === 1) {
+        cb(null, results[keys[0]])
+      } else {
+        cb(null, results)
+      }
+    }
+  })
+
   client.scrape({ infoHash: opts.infoHash })
   return client
 }
